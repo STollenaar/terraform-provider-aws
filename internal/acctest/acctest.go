@@ -1959,6 +1959,28 @@ func CheckCallerIdentityAccountID(n string) resource.TestCheckFunc {
 	}
 }
 
+// CheckProfiles defined data resource for the terraform plugin
+func CheckProfiles(n string) resource.TestCheckFunc {
+	return func(s *terraform.State) error {
+		rs, ok := s.RootModule().Resources[n]
+
+		if !ok {
+			return fmt.Errorf("failed reading profiles: %s", s)
+		}
+
+		if rs.Primary.Attributes["name"] == "" {
+			return fmt.Errorf("name expected to not be nil")
+		}
+		if rs.Primary.Attributes["aws_access_key_id"] == "" {
+			return fmt.Errorf("aws_access_key_id name expected to not be nil")
+		}
+		if rs.Primary.Attributes["aws_secret_access_key_id"] == "" {
+			return fmt.Errorf("aws_secret_access_key_id expected to not be nil")
+		}
+		return nil
+	}
+}
+
 func CheckResourceAttrGreaterThanValue(n, key, value string) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 		rs, ok := s.RootModule().Resources[n]
